@@ -1,10 +1,11 @@
 import React from 'react';
+import EmployeeClass from './EmployeeClass'
 
 function App() {
   return (
-    <div>
-      Empty App
-    </div>
+      <>
+        <EmployeeClass/>
+      </>
   );
 }
 
