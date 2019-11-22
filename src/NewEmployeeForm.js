@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from './EmployeeClass.css'
-import PropTypes from 'prop-types';
 
 const NewEmployeeForm  = ({
                               name,
@@ -14,7 +13,8 @@ const NewEmployeeForm  = ({
                               onChangeAge,
                               onChangeEmail,
                               onChangePhoneNumber,
-                              errors
+                              errors,
+                              isReadyToSubmit
                           }) => {
 
 
@@ -41,7 +41,7 @@ const NewEmployeeForm  = ({
                 <input type="text" value={phoneNumber}  onChange={onChangePhoneNumber}/>
             </>
             }
-            <button onClick={onClickSubmit}> Submit </button>
+            <button disabled={!isReadyToSubmit} onClick={onClickSubmit}> Submit </button>
             {errors.size !== 0 &&
                 <div className={'redColor'}>
                     {errors.map(e => <div key={e}> {e} </div>)}
@@ -49,8 +49,6 @@ const NewEmployeeForm  = ({
             }
         </div>
     );
-
 };
-
 
 export default NewEmployeeForm;

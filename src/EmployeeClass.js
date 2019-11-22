@@ -15,10 +15,15 @@ class EmployeeClass extends React.Component {
             email : "",
             isEmail : true,
             phoneNumber: "",
-            errors: []
+            validationName: [],
+            validationEmailAndPhoneNmbr: [],
+            validationAge: [],
+            isAgeCorrect: false,
+            isNameCorrect: false,
+            isEmailAndPhoneCorrect: false,
         };
         this.handleAddEmployee = this.handleAddEmployee.bind(this);
-        this.handleSubmitingEmployee = this.handleSubmitingEmployee.bind(this);
+        this.handleSubmitForm = this.handleSubmitForm.bind(this);
     }
 
     //fetching data of employees from server from previous lab
@@ -29,7 +34,6 @@ class EmployeeClass extends React.Component {
     }
 
     render() {
-
         return (
             <>
                 <h1>Employees</h1>
@@ -46,8 +50,11 @@ class EmployeeClass extends React.Component {
                     isEmail={this.state.isEmail}
                     phoneNumber={this.state.phoneNumber}
                     onChangePhoneNumber={this.handleChangePhoneNumber}
-                    onClickSubmit={this.handleSubmitingEmployee}
-                    errors={this.state.errors}
+                    errors={[...this.state.validationName, ...this.state.validationEmailAndPhoneNmbr,
+                             ...this.state.validationAge]}
+                    isReadyToSubmit={this.state.isEmailAndPhoneCorrect && this.state.isAgeCorrect &&
+                                     this.state.isNameCorrect}
+                    onClickSubmit={this.handleSubmitForm}
                 />
                 }
 
@@ -70,45 +77,86 @@ class EmployeeClass extends React.Component {
         );
     }
 
-    handleChangeName = e => this.setState({name: e.target.value});
-    handleChangePhoneNumber = e => this.setState({phoneNumber: e.target.value});
+    handleSubmitForm() {
+        this.props.history.push('/success');
+    }
+
+    handleChangeName = e => {
+        let name = e.target.value;
+        this.setState({name: name});
+        let isCorrect = false;
+        let errors = [];
+        if (name !== null) {
+            if (name.length < 3) {
+                errors.push("Name should be at least 3 characters long.");
+            } else {
+                isCorrect = true;
+            }
+        }
+        this.setState({validationName: errors, isNameCorrect: isCorrect});
+    };
+
+    handleChangePhoneNumber = e => {
+        let number =  e.target.value;
+        let isCorrect = false;
+        this.setState({phoneNumber: number});
+        let errors = [];
+        if (number !== null) {
+            if (number.length !== 9) {
+                errors.push("Phone number should be 9 characters long.");
+            }
+            if (number.match(/^[0-9]+$/) == null) {
+                errors.push("Phone number should contain only digits.");
+            }
+            if (errors.length === 0)
+                isCorrect = true;
+        }
+        this.setState({validationEmailAndPhoneNmbr : errors, isEmailAndPhoneCorrect: isCorrect});
+    };
 
     handleChangeAge = e => {
         let age = e.target.value;
+        let isCorrect = false;
         let labelName = age >= 18 ? 'Name' : 'Parent name';
         let isEmailOrPhoneNmb = age >= 18;
-        this.setState({ ...this.state, age: age, isEmail : isEmailOrPhoneNmb, labelName : labelName});
+        this.setState({age: age, isEmail : isEmailOrPhoneNmb, labelName : labelName});
+        let errors = [];
+        if (age !== null) {
+            if (age > 120) {
+                errors.push("Age cannot be bigger than 120.");
+            } else if (age < 0) {
+                errors.push("Age cannot be negative number.");
+            } else {
+                isCorrect = true;
+            }
+        }
+        this.setState({validationAge : errors, isAgeCorrect: isCorrect});
     };
 
-    handleChangeEmail = e => this.setState({email: e.target.value});
+    handleChangeEmail = e => {
+        let email =  e.target.value;
+        let isCorrect = false;
+        this.setState({email: email});
+        let errors = [];
+        if (email != null) {
+            if (email.length < 5) {
+                errors.push("Email should be at least 5 characters long.");
+            }
+            if (email.split("").filter(x => x === "@").length !== 1) {
+                errors.push("Email should contain a @.");
+            }
+            if (email.indexOf(".") === -1) {
+                errors.push("Email should contain at least one dot.");
+            }
+            if (errors.length === 0)
+                isCorrect = true;
+        }
+        this.setState({validationEmailAndPhoneNmbr : errors, isEmailAndPhoneCorrect: isCorrect});
+    };
 
     handleAddEmployee() {
         this.setState({addEmployee : true});
     }
-
-    handleSubmitingEmployee() {
-        let errors = [];
-        if (this.state.isEmail) {
-            if (this.state.email.length < 5) {
-                errors.push("Email should be at least 5 characters long.");
-            }
-            if (this.state.email.split("").filter(x => x === "@").length !== 1) {
-                errors.push("Email should contain a @.");
-            }
-            if (this.state.email.indexOf(".") === -1) {
-                errors.push("Email should contain at least one dot.");
-            }
-        } else {
-            if (this.state.phoneNumber.length !== 9) {
-                errors.push("Phone number should be 9 characters long.");
-            }
-            if (this.state.phoneNumber.match(/^[0-9]+$/) == null) {
-                errors.push("Phone number should contain only digits.");
-            }
-        }
-        this.setState({errors: errors});
-    }
-
 }
 
 export default EmployeeClass;
