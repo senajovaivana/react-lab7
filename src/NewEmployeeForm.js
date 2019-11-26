@@ -6,15 +6,12 @@ const NewEmployeeForm  = ({
                               age,
                               email,
                               phoneNumber,
-                              onClickSubmit,
                               setLabelName,
                               isEmail,
                               onChangeName,
                               onChangeAge,
                               onChangeEmail,
                               onChangePhoneNumber,
-                              errors,
-                              isReadyToSubmit
                           }) => {
 
 
@@ -41,12 +38,8 @@ const NewEmployeeForm  = ({
                 <input type="text" value={phoneNumber}  onChange={onChangePhoneNumber}/>
             </>
             }
-            <button disabled={!isReadyToSubmit} onClick={onClickSubmit}> Submit </button>
-            {errors.size !== 0 &&
-                <div className={'redColor'}>
-                    {errors.map(e => <div key={e}> {e} </div>)}
-                </div>
-            }
+            <button> Submit </button>
+
         </div>
     );
 };
