@@ -6,14 +6,15 @@ const NewEmployeeForm  = ({
                               age,
                               email,
                               phoneNumber,
+                              onClickSubmit,
                               setLabelName,
                               isEmail,
                               onChangeName,
                               onChangeAge,
                               onChangeEmail,
                               onChangePhoneNumber,
+                              errors
                           }) => {
-
 
     return (
 
@@ -26,10 +27,10 @@ const NewEmployeeForm  = ({
             <input type="text" value={name} onChange={onChangeName} />
 
             {isEmail &&
-                <>
-                    <label> Email </label>
-                    <input type="text" value={email}  onChange={onChangeEmail} />
-                </>
+            <>
+                <label> Email </label>
+                <input type="text" value={email}  onChange={onChangeEmail} />
+            </>
             }
 
             {!isEmail &&
@@ -38,8 +39,12 @@ const NewEmployeeForm  = ({
                 <input type="text" value={phoneNumber}  onChange={onChangePhoneNumber}/>
             </>
             }
-            <button> Submit </button>
-
+            {errors.size !== 0 &&
+            <div className={'redColor'}>
+                {errors.map(e => <div key={e}> {e} </div>)}
+            </div>
+            }
+            <button onClick={onClickSubmit}> Submit </button>
         </div>
     );
 };
