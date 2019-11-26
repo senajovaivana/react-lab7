@@ -9,7 +9,7 @@ function App() {
           <Router>
               <Switch>
                   <Route exact path="/" component={EmployeeClass}/>
-                  <Route exact path="/success" component={NewComponent}/>
+                 
               </Switch>
           </Router>
 
